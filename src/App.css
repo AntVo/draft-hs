@@ -1,0 +1,33 @@
+
+/* color palette from darkest to lightest 
+#063c53	(6,60,83)
+#136572	(19,101,114)
+#d8e1cf	(216,225,207)
+#73aca7	(115,172,167)
+#438484	(67,132,132)
+*/
+
+#app{
+	height: 100%;
+	width: 100%;
+	position: absolute;
+}
+
+#login-screen{
+	background-color: #063c53;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#login-form{
+	display: flex;
+	flex-direction: column;
+}
+
+.login{
+	margin-top:10px;
+	margin-bottom:10px;
+}
