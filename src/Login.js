@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 
+
 export default class Login extends Component {
 
+	handleLogin = (event) => {		
+		event.preventDefault();
+		this.props.loginUser(this.refs.username.value);
+	}
 
   render() {
       return (
  				<div id="login-screen">
- 					<div id="login-form">
-						<input class="input is-info login" type="text" placeholder="Guest Name"></input>
-						<a class="button is-light login">Join</a>
-					</div>
+ 					<form id="login-form" onSubmit={this.handleLogin}>
+						<input class="input is-info login" type="text" placeholder="Guest Name" ref="username"></input>
+						<button class="button is-light login">Join</button>
+					</form>
  				</div>
       );
     }

@@ -3,17 +3,29 @@ import Login from './Login';
 import Lobby from './Lobby';
 import Draft from './Draft';
 import Navigation from './Navigation';
-import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+import './App.css';
 
 class App extends Component {
 
-  render() {
+constructor(props){
+      super(props)
+      this.state = {
+        user: null,
+    };
+ }
+
+loginUser = (username) => {
+  this.setState({ user: username });
+}
+
+render() {
     return (
       <Router path="/">
         <div id="app">
           <Switch>
-            <Route exact path="/" component={Login} />
+            <Route exact path="/" render={() => <Login loginUser={this.loginUser} />} />
             <Route path="/lobby" component={Lobby} />
             <Route path="/draft" component={Draft} />
           </Switch>
