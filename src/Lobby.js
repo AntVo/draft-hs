@@ -6,7 +6,7 @@ export default class Lobby extends Component {
   render() {
       return (
  				<div>
- 				lobby
+ 					lobby
  				</div>
       );
     }
