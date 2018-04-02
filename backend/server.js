@@ -1,21 +1,26 @@
-var express = require('express');
-var socket = require('socket.io');
+const express = require('express')
+const http = require('http')
+const socketIO = require('socket.io')
+const index = require("./index");
 
-var app = express();
-var server = app.listen(4030);
-var io = socket(server);
+// our localhost port
+const port = 4001
 
-console.log("Socket server is running");
+const app = express();
+app.use(index);
+// our server instance
+const server = http.createServer(app)
 
-app.use(express.static('public'));
-io.sockets.on('connection', newConnection);
+// This creates our socket using the instance of the server
+const io = socketIO(server)
 
-function newConnection(socket){
-	console.log('new connection' + socket.id);
-	// socket.on('mouse', mouseMessage);
-	
-	function mouseMessage(data){
-		socket.broadcast.emit('mouse', data);
-		console.log(data);
-	}
-}
+// This is what the socket.io syntax is like, we will work this later
+io.on('connection', socket => {
+  console.log('User connected')
+  
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
+})
+
+server.listen(port, () => console.log(`Listening on port ${port}`))
