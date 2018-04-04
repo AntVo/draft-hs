@@ -4,7 +4,6 @@ import Lobby from './Lobby';
 import Draft from './Draft';
 import Navigation from './Navigation';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import socketIOClient from 'socket.io-client'
 import './App.css';
 
 class App extends Component {
@@ -19,7 +18,6 @@ constructor(props){
  }
 
 loginUser = (username) => {
-  const socket = socketIOClient(this.state.endpoint);
   this.setState({ user: username });
 }
 
@@ -29,7 +27,7 @@ render() {
         <div id="app">
           <Switch>
             <Route exact path="/" render={() => this.state.user ? <Redirect to="/lobby" /> : <Login loginUser={this.loginUser} />} />
-            <Route path="/lobby" component={Lobby} />
+            <Route path="/lobby" render={() => <Lobby user={this.state.user}/> } />
             <Route path="/draft" component={Draft} />
           </Switch>
         </div>
