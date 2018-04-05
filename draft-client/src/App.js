@@ -29,6 +29,7 @@ render() {
             <Route exact path="/" render={() => this.state.user ? <Redirect to="/lobby" /> : <Login loginUser={this.loginUser} />} />
             <Route path="/lobby" render={() => <Lobby user={this.state.user}/> } />
             <Route path="/draft" component={Draft} />
+            <Route path="/:id" component={draftRoom} />
           </Switch>
         </div>
       </Router>

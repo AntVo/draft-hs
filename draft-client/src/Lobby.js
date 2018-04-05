@@ -33,10 +33,15 @@ export default class Lobby extends Component {
     })
 	}
 
+	joinRoom = (roomID) => {
+		this.socket.emit('joinroom', roomID);
+	}
+
 	renderRoomList = () => {
     return this.state.roomlist.map((room, index) => 
       <DraftRoomItem key={index} 
-                 room={room}
+                	   room={room}
+                	   joinRoom={this.joinRoom}
       />);
 	}
 

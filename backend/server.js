@@ -37,6 +37,10 @@ lobbySocket.on('connection', socket => {
     socket.emit('roomlist', rooms);
   })
 
+  socket.on('joinroom', (roomID) => {
+    socket.join(roomID);
+  })
+
 
 })
 
