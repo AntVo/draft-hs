@@ -25,12 +25,12 @@ lobbySocket.on('connection', socket => {
   console.log('User connected')
   
   socket.on('disconnect', () => {
-    console.log('user disconnected')
+    console.log('user disconnected');
   })
 
-  socket.on('create room', (name) => {
-  	console.log('creating room: ' + name);
-  	rooms.push( { roomName: name } );
+  socket.on('create room', (format, roomID) => {
+  	console.log('creating room: ' + roomID + ' format: ' + format);
+  	rooms.push( { roomID: roomID, roomFormat: format } );
   })
 
   socket.on('roomlist', () => {

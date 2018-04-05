@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
-import DraftRoom from './DraftRoom.js';
+import DraftRoomItem from './DraftRoomItem.js';
 
 export default class Lobby extends Component {
 
@@ -10,33 +10,50 @@ export default class Lobby extends Component {
 	        user: null,
 	        endpoint: "http://127.0.0.1:4001/lobby",
 	        roomlist: [],
+	        formValue: '',
 	    };
 	    this.socket = socketIOClient(this.state.endpoint);
 	 }
 
+	componentDidMount(){
+		this.socket.emit('roomlist');
+		this.socket.on('roomlist', (roomlist) => {
+       this.setState({ roomlist: roomlist })
+    })
+	}
 
-	createRoom = () => { 
-		const roomName = Math.floor(Math.random()*9999).toString(); 
-    this.socket.emit('create room', roomName);
+	createRoom = (event) => { 
+		event.preventDefault();
+		const roomID = Math.floor(Math.random()*9999).toString(); 
+		const roomFormat = this.refs.format.value;
+    this.socket.emit('create room', roomFormat, roomID);
     this.socket.emit('roomlist');
     this.socket.on('roomlist', (roomlist) => {
        this.setState({ roomlist: roomlist })
     })
 	}
 
-
-
-	renderRoomList(){
+	renderRoomList = () => {
     return this.state.roomlist.map((room, index) => 
-      <DraftRoom key={index} 
+      <DraftRoomItem key={index} 
                  room={room}
       />);
+	}
+
+	handleChange = (event) =>{
+		this.setState({ formValue: event.target.value })
 	}
 
   render() {
       return (
  				<div>
- 					<button className="button is-success" onClick={this.createRoom}>Create a Room</button>
+ 					<form onSubmit={this.createRoom} >
+ 						<select value={this.state.formValue} onChange={this.handleChange} ref="format">
+ 							<option value="classic">classic</option>
+ 							<option value="custom">antoine special</option>
+ 						</select>
+ 						<button className="button is-success">Create a Room</button>
+ 					</form>
  					{this.renderRoomList()}
  				</div>
       )
