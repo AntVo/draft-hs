@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Login from './Login';
 import Lobby from './Lobby';
-import Draft from './Draft';
 import Navigation from './Navigation';
+import DraftRoom from './DraftRoom';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import './App.css';
 
@@ -28,8 +28,7 @@ render() {
           <Switch>
             <Route exact path="/" render={() => this.state.user ? <Redirect to="/lobby" /> : <Login loginUser={this.loginUser} />} />
             <Route path="/lobby" render={() => <Lobby user={this.state.user}/> } />
-            <Route path="/draft" component={Draft} />
-            <Route path="/room/:id" component={draftRoom} />
+            <Route path="/room/:id" component={DraftRoom} />
           </Switch>
         </div>
       </Router>

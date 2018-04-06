@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
 import DraftRoomItem from './DraftRoomItem.js';
+import { Route, Redirect } from 'react-router'
 
 export default class Lobby extends Component {
 
@@ -11,6 +12,7 @@ export default class Lobby extends Component {
 	        endpoint: "http://127.0.0.1:4001/lobby",
 	        roomlist: [],
 	        formValue: '',
+	        redirect: false,
 	    };
 	    this.socket = socketIOClient(this.state.endpoint);
 	 }
@@ -35,7 +37,8 @@ export default class Lobby extends Component {
 
 	joinRoom = (roomID) => {
 		this.socket.emit('joinroom', roomID);
-	}
+		this.setState({ redirect: true })
+	} 
 
 	renderRoomList = () => {
     return this.state.roomlist.map((room, index) => 
@@ -50,17 +53,20 @@ export default class Lobby extends Component {
 	}
 
   render() {
-      return (
- 				<div>
- 					<form onSubmit={this.createRoom} >
- 						<select value={this.state.formValue} onChange={this.handleChange} ref="format">
- 							<option value="classic">classic</option>
- 							<option value="custom">antoine special</option>
- 						</select>
- 						<button className="button is-success">Create a Room</button>
- 					</form>
- 					{this.renderRoomList()}
- 				</div>
+  	return(
+  			(this.state.redirect === true) ?
+		 			<Redirect to="/room/3153"/> 
+		 			: 
+	 				<div>
+	 					<form onSubmit={this.createRoom} >
+	 						<select value={this.state.formValue} onChange={this.handleChange} ref="format">
+	 							<option value="classic">classic</option>
+	 							<option value="custom">antoine special</option>
+	 						</select>
+	 						<button className="button is-success">Create a Room</button>
+	 					</form>
+	 					{this.renderRoomList()}
+	 				</div>
       )
     }
 

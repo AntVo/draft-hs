@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-export default class DraftRoomItem extends Component {
+export default class DraftRoom extends Component {
 
 	render(){
+		console.log(this.props.match.params.id);
 		return (
         <div>
-        	{this.props.match.params}
         </div>
 	)}
 

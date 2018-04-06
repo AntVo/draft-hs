@@ -38,6 +38,7 @@ lobbySocket.on('connection', socket => {
   })
 
   socket.on('joinroom', (roomID) => {
+    console.log('joining ' + roomID);
     socket.join(roomID);
   })
 
