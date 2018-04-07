@@ -8,6 +8,11 @@ const sets = require('./sets.js');
 // our localhost port
 const port = 4001;
 
+/*
+ TODO -*-*-*
+ ---- Send to each Drafter (Drafter.id is their socket.id) a pack.
+*/
+
 const app = express();
 app.use(index);
 // our server instance
@@ -39,8 +44,11 @@ function runDraft(room){
 function runRound(room){
   // Give everyone a pack
     room.drafters.forEach((drafter) => {
-      drafter.pack = createPack(room.format);
+      pack = createPack(room.format);
+      io.to(drafter.id).emit('getpack', pack);
     })
+
+
 
     for (var i = 0; i < 15; i++) {
 
@@ -106,7 +114,6 @@ lobbySocket.on('connection', socket => {
 
   socket.on('joinroom', (roomID, username) => {
     console.log(username + ' is joining ' + roomID);
-
     const drafter = new Drafter(socket.id, username);
     rooms[roomID].drafters.push(drafter);
 
@@ -115,12 +122,13 @@ lobbySocket.on('connection', socket => {
     console.log(rooms[roomID].drafters);
     socket.join(roomID);
   })
-
   // Socket Room methods
+
 })
 
 
 server.listen(port, () => {
-  console.log(`Listening on port ${port}`)
+  console.log(`Listening on port ${port}`);
+  createPack('wild');
 });
 
