@@ -4,6 +4,7 @@ const socketIO = require('socket.io')
 const index = require("./index")
 const router = express.Router();
 const axios = require('axios');
+const sets = require('./sets.js');
 // our localhost port
 const port = 4001;
 
@@ -15,7 +16,7 @@ const server = http.createServer(app)
 class Room {
   constructor(format, roomID){
     this.roomID = roomID;
-    this.people = [];
+    this.drafters = [];
     this.format = format; 
   }
 }
@@ -37,12 +38,41 @@ function runDraft(room){
 
 function runRound(room){
   // Give everyone a pack
+    room.drafters.forEach((drafter) => {
+      drafter.pack = createPack(room.format);
+    })
+
+    for (var i = 0; i < 15; i++) {
+
+    }
 
    // while peoples packs are not empty,
    // user picks a card and puts it in
    // passes to next
 }
 
+// returns a randomized pack (1 legendary, 2 epics, 4 rares, 8 commons)
+// TODO: Optimization, Create 25 packs instead of runniing create pack 25 times.
+function createPack(format){
+  const pack = [];
+  const legendaries = sets[`${format}`].legendaries;
+  const epics = sets[`${format}`].epics;
+  const rares = sets[`${format}`].rares;
+  const commons = sets[`${format}`].commons;
+
+  pack.push(legendaries[Math.floor(Math.random()*legendaries.length)]); // add legendary
+  for (var i = 0; i < 2; i++){   // add 2 epics
+    pack.push(epics[Math.floor(Math.random()*epics.length)]);
+  }
+  for (var i = 0; i < 4; i++){   // add 4 rares
+    pack.push(rares[Math.floor(Math.random()*rares.length)]);
+  }
+  for(var i = 0; i < 8; i++){    // add 8 commons
+    pack.push(commons[Math.floor(Math.random()*commons.length)]);
+  }
+  console.log(pack);
+  return pack;
+}
 
 // Mock Database 
 // A room should have { roomID, format, packs}
@@ -54,8 +84,8 @@ var lobbySocket = io.of('/lobby');
 
 // This is what the socket.io syntax is like
 lobbySocket.on('connection', socket => { 
+  // socket.id
   console.log('User connected')
-  
   socket.on('disconnect', () => {
     console.log('user disconnected');
   })
@@ -71,19 +101,27 @@ lobbySocket.on('connection', socket => {
     socket.emit('roomlist', rooms);
   })
 
+
+
   socket.on('joinroom', (roomID, username) => {
     console.log(username + ' is joining ' + roomID);
 
     const drafter = new Drafter(1, username);
-    rooms[roomID].people.push(drafter);
+    rooms[roomID].drafters.push(drafter);
 
-    const length = Object.keys(rooms[roomID].people).length;
+    const length = Object.keys(rooms[roomID].drafters).length;
     console.log('number of players in room: ' + length);
     socket.join(roomID);
   })
+
+
+  // Socket Room methods
 
 })
 
 
 
-server.listen(port, () => console.log(`Listening on port ${port}`))
+server.listen(port, () => {
+  console.log(`Listening on port ${port}`)
+});
+
