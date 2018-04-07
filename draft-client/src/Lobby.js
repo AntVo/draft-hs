@@ -10,38 +10,34 @@ export default class Lobby extends Component {
 	      this.state = {
 	        user: null,
 	        endpoint: "http://127.0.0.1:4001/lobby",
-	        roomlist: [],
+	        roomlist: {}, // THIS IS NOT AN ARRAY ITS A DICTIONARY. FIX!
 	        formValue: '',
-	        redirect: false,
+	        redirect: -1,
 	    };
 	    this.socket = socketIOClient(this.state.endpoint);
+	    this.socket.on('roomlist', (roomlist) => {
+	    		this.setState({ roomlist: roomlist });
+	    });
 	 }
 
 	componentDidMount(){
-		this.socket.emit('roomlist');
-		this.socket.on('roomlist', (roomlist) => {
-       this.setState({ roomlist: roomlist })
-    })
+    this.socket.emit('roomlist');
 	}
 
 	createRoom = (event) => { 
 		event.preventDefault();
-		const roomID = Math.floor(Math.random()*9999).toString(); 
 		const roomFormat = this.refs.format.value;
-    this.socket.emit('create room', roomFormat, roomID);
-    this.socket.emit('roomlist');
-    this.socket.on('roomlist', (roomlist) => {
-       this.setState({ roomlist: roomlist })
-    })
+    this.socket.emit('create room', roomFormat);
 	}
 
 	joinRoom = (roomID) => {
-		this.socket.emit('joinroom', roomID);
-		this.setState({ redirect: true })
+		this.socket.emit('joinroom', roomID, this.state.user);
+		this.setState({ redirect: roomID })
 	} 
 
 	renderRoomList = () => {
-    return this.state.roomlist.map((room, index) => 
+		const roomListArray = Object.values(this.state.roomlist);
+    return roomListArray.map((room, index) => 
       <DraftRoomItem key={index} 
                 	   room={room}
                 	   joinRoom={this.joinRoom}
@@ -53,11 +49,14 @@ export default class Lobby extends Component {
 	}
 
   render() {
-  	return(
-  			(this.state.redirect === true) ?
-		 			<Redirect to="/room/3153"/> 
-		 			: 
-	 				<div>
+  	let route = null;
+  	this.socket.emit('roomlist', this.state.roomlist);
+
+  	if (this.state.redirect !== -1){
+  		route = <Redirect to={`/room/${this.state.redirect}`}/> 
+  	} else {
+  		route = 
+  				<div>
 	 					<form onSubmit={this.createRoom} >
 	 						<select value={this.state.formValue} onChange={this.handleChange} ref="format">
 	 							<option value="classic">classic</option>
@@ -67,7 +66,9 @@ export default class Lobby extends Component {
 	 					</form>
 	 					{this.renderRoomList()}
 	 				</div>
-      )
+  	}
+
+  	return(route);
     }
 
   }

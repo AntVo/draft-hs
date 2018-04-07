@@ -11,6 +11,9 @@ export default class DraftRoomItem extends Component {
       		{this.props.room.roomID}
       		<br></br>
       		{this.props.room.format}
+                  <div>
+                  {this.props.room.drafters.length}
+                  </div>
       		<button className="button is-primary" id="join-button" onClick={this.props.joinRoom.bind(this, this.props.room.roomID)}>join</button>
       		<button className="button is-warning" id="delete-button">delete</button>
       	</div>

@@ -90,35 +90,34 @@ lobbySocket.on('connection', socket => {
     console.log('user disconnected');
   })
 
+
   socket.on('create room', (format) => {
     const length = Object.keys(rooms).length
   	console.log('creating room: ' + length + ' format: ' + format);
     const room = new Room(format, length)
   	rooms[length] = room;
+    socket.emit('create room', rooms);
+    socket.emit('roomlist', rooms);
   })
 
   socket.on('roomlist', () => {
     socket.emit('roomlist', rooms);
   })
 
-
-
   socket.on('joinroom', (roomID, username) => {
     console.log(username + ' is joining ' + roomID);
 
-    const drafter = new Drafter(1, username);
+    const drafter = new Drafter(socket.id, username);
     rooms[roomID].drafters.push(drafter);
 
     const length = Object.keys(rooms[roomID].drafters).length;
     console.log('number of players in room: ' + length);
+    console.log(rooms[roomID].drafters);
     socket.join(roomID);
   })
 
-
   // Socket Room methods
-
 })
-
 
 
 server.listen(port, () => {

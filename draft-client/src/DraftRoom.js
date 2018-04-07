@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 // Todo implement a pregame lobby (Ready up, see seats green, start game)
 export default class DraftRoom extends Component {
 
-
 	constructor(props){
 	      super(props)
 	      this.state = {

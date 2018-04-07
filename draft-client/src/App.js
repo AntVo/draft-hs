@@ -13,7 +13,6 @@ constructor(props){
       this.state = {
         user: null,
         endpoint: "http://127.0.0.1:4001",
-
     };
  }
 
