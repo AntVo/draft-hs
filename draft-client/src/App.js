@@ -25,9 +25,9 @@ render() {
       <Router path="/">
         <div id="app">
           <Switch>
-            <Route exact path="/" render={() => this.state.user ? <Redirect to="/lobby" /> : <Login loginUser={this.loginUser} />} />
-            <Route path="/lobby" render={() => <Lobby user={this.state.user}/> } />
-            <Route path="/room/:id" render={() => <DraftRoom user={this.state.user}/> }/>
+            <Route exact path="/" render={(props) => this.state.user ? <Redirect to="/lobby" /> : <Login {...props} loginUser={this.loginUser} />} />
+            <Route path="/lobby" render={(props) => <Lobby {...props} user={this.state.user}/> } />
+            <Route path="/room/:id" component={(props) => <DraftRoom {...props} user={this.state.user} /> }/>
           </Switch>
         </div>
       </Router>

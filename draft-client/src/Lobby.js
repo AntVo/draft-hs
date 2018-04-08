@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client';
 import DraftRoomItem from './DraftRoomItem.js';
-import { Route, Redirect } from 'react-router'
+import { Redirect } from 'react-router'
 
 export default class Lobby extends Component {
 
@@ -10,7 +10,7 @@ export default class Lobby extends Component {
 	      this.state = {
 	        user: null,
 	        endpoint: "http://127.0.0.1:4001/lobby",
-	        roomlist: {}, // THIS IS NOT AN ARRAY ITS A DICTIONARY. FIX!
+	        roomlist: {}, 
 	        formValue: '',
 	        redirect: -1,
 	    };
@@ -31,7 +31,6 @@ export default class Lobby extends Component {
 	}
 
 	joinRoom = (roomID) => {
-		this.socket.emit('joinroom', roomID, this.state.user);
 		this.setState({ redirect: roomID })
 	} 
 
@@ -53,7 +52,9 @@ export default class Lobby extends Component {
   	this.socket.emit('roomlist', this.state.roomlist);
 
   	if (this.state.redirect !== -1){
-  		route = <Redirect to={`/room/${this.state.redirect}`}/> 
+  		route = <Redirect to={{
+  			pathname: `/room/${this.state.redirect}`,
+  		}}/> 
   	} else {
   		route = 
   				<div>
