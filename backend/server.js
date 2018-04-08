@@ -8,11 +8,6 @@ const sets = require('./sets.js');
 // our localhost port
 const port = 4001;
 
-/*
- TODO -*-*-*
- ---- Send to each Drafter (Drafter.id is their socket.id) a pack.
-*/
-
 const app = express();
 app.use(index);
 // our server instance
@@ -48,12 +43,9 @@ function runRound(room){
       socket.to(drafter.id).emit('getpack', pack);
     })
 
-
-
     for (var i = 0; i < 15; i++) {
 
     }
-
    // while peoples packs are not empty,
    // user picks a card and puts it in
    // passes to next
@@ -67,7 +59,6 @@ function createPack(format){
   const epics = sets[`${format}`].epics;
   const rares = sets[`${format}`].rares;
   const commons = sets[`${format}`].commons;
-
   pack.push(legendaries[Math.floor(Math.random()*legendaries.length)]); // add legendary
   for (var i = 0; i < 2; i++){   // add 2 epics
     pack.push(epics[Math.floor(Math.random()*epics.length)]);
@@ -98,7 +89,6 @@ lobbySocket.on('connection', socket => {
     console.log('user disconnected');
   })
 
-
   socket.on('create room', (format) => {
     const length = Object.keys(rooms).length
   	console.log('creating room: ' + length + ' format: ' + format);
@@ -119,10 +109,10 @@ lobbySocket.on('connection', socket => {
     console.log('number of players in room: ' + length);
     console.log(rooms[roomID].drafters);
     socket.join(roomID);
+    lobbySocket.to(roomID).emit('userjoined', rooms[roomID].drafters); 
   })
 
   // Socket Room methods
-
 
 })
 
