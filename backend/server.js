@@ -45,7 +45,7 @@ function runRound(room){
   // Give everyone a pack
     room.drafters.forEach((drafter) => {
       pack = createPack(room.format);
-      io.to(drafter.id).emit('getpack', pack);
+      socket.to(drafter.id).emit('getpack', pack);
     })
 
 
@@ -104,7 +104,6 @@ lobbySocket.on('connection', socket => {
   	console.log('creating room: ' + length + ' format: ' + format);
     const room = new Room(format, length)
   	rooms[length] = room;
-    socket.emit('create room', rooms);
     socket.emit('roomlist', rooms);
   })
 
@@ -116,19 +115,19 @@ lobbySocket.on('connection', socket => {
     console.log(username + ' is joining ' + roomID);
     const drafter = new Drafter(socket.id, username);
     rooms[roomID].drafters.push(drafter);
-
     const length = Object.keys(rooms[roomID].drafters).length;
     console.log('number of players in room: ' + length);
     console.log(rooms[roomID].drafters);
     socket.join(roomID);
   })
+
   // Socket Room methods
+
 
 })
 
 
 server.listen(port, () => {
   console.log(`Listening on port ${port}`);
-  createPack('wild');
 });
 
