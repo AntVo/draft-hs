@@ -3,7 +3,6 @@ const http = require('http')
 const socketIO = require('socket.io')
 const index = require("./index")
 const router = express.Router();
-const axios = require('axios');
 const sets = require('./sets.js');
 // our localhost port
 const port = 4001;
@@ -117,7 +116,7 @@ lobbySocket.on('connection', socket => {
   })
   
   socket.on('startdraft', (roomID) => {
-    room[roomID].stage = "drafting";
+    rooms[roomID].stage = "drafting";
     lobbySocket.to(roomID).emit('draftstarted');
     runRound(roomID);
   })
