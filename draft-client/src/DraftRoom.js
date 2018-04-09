@@ -37,7 +37,6 @@ export default class DraftRoom extends Component {
 	 startDraft = () => {
 	    this.setState({ stage: "drafting" });
 	    this.socket.emit('startdraft', this.props.match.params.id);
-	    //SOCKET SOCKET SOMETHING SOMETHING
 	 }
 
 	renderSection(){
@@ -49,10 +48,12 @@ export default class DraftRoom extends Component {
 					</div>
 				)
 		}
-		else if (this.state.stage === "drafting"){
-			<DraftGallery pack={this.state.pack}/>
+		if (this.state.stage === "drafting" && this.state.pack !== null){
+			return(
+				<DraftGallery pack={this.state.pack}/>
+			)
 		}
-		else if (this.state.stage === "deckbuilding"){
+		if (this.state.stage === "deckbuilding"){
 
 		}
 
