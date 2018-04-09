@@ -24,6 +24,10 @@ export default class Lobby extends Component {
     this.socket.emit('roomlist');
 	}
 
+	componentDidUpdate(){
+		 this.socket.emit('roomlist', this.state.roomlist);
+	}
+
 	createRoom = (event) => { 
 		event.preventDefault();
 		const roomFormat = this.refs.format.value;
@@ -49,8 +53,7 @@ export default class Lobby extends Component {
 
   render() {
   	let route = null;
-  	this.socket.emit('roomlist', this.state.roomlist);
-
+  	// this.socket.emit('roomlist', this.state.roomlist);
   	if (this.state.redirect !== -1){
   		route = <Redirect to={{
   			pathname: `/room/${this.state.redirect}`,
@@ -61,7 +64,7 @@ export default class Lobby extends Component {
 	 					<form onSubmit={this.createRoom} >
 	 						<select value={this.state.formValue} onChange={this.handleChange} ref="format">
 	 							<option value="classic">classic</option>
-	 							<option value="custom">antoine special</option>
+	 							<option value="wild">wild</option>
 	 						</select>
 	 						<button className="button is-success">Create a Room</button>
 	 					</form>
