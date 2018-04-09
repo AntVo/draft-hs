@@ -13,11 +13,17 @@ app.use(index);
 // our server instance
 const server = http.createServer(app)
 
+
+// Mock Database 
+// A room should have { roomID, format, packs}
+const rooms = {};
+
 class Room {
   constructor(format, roomID){
     this.roomID = roomID;
     this.drafters = [];
     this.format = format; 
+    this.stage = "pregame";
   }
 }
 
@@ -36,16 +42,17 @@ function runDraft(room){
   }
 }
 
-function runRound(room){
+function runRound(roomID){
+  const room = rooms[roomID];
   // Give everyone a pack
     room.drafters.forEach((drafter) => {
       pack = createPack(room.format);
-      socket.to(drafter.id).emit('getpack', pack);
+      lobbySocket.to(drafter.id).emit('getpack', pack);
     })
 
-    for (var i = 0; i < 15; i++) {
+    // for (var i = 0; i < 15; i++) {
 
-    }
+    // }
    // while peoples packs are not empty,
    // user picks a card and puts it in
    // passes to next
@@ -73,9 +80,6 @@ function createPack(format){
   return pack;
 }
 
-// Mock Database 
-// A room should have { roomID, format, packs}
-const rooms = {};
 
 // This creates our socket using the instance of the server
 const io = socketIO(server)
@@ -94,12 +98,12 @@ lobbySocket.on('connection', socket => {
   	console.log('creating room: ' + length + ' format: ' + format);
     const room = new Room(format, length)
   	rooms[length] = room;
-    socket.emit('roomlist', rooms);
+    lobbySocket.emit('roomlist', rooms); 
   })
 
-  socket.on('roomlist', () => {
-    socket.emit('roomlist', rooms);
-  })
+    socket.on('roomlist', () => {
+       socket.emit('roomlist', rooms);
+    })
 
   socket.on('joinroom', (roomID, username) => {
     console.log(username + ' is joining ' + roomID);
@@ -111,7 +115,12 @@ lobbySocket.on('connection', socket => {
     socket.join(roomID);
     lobbySocket.to(roomID).emit('userjoined', rooms[roomID].drafters); 
   })
-
+  
+  socket.on('startdraft', (roomID) => {
+    room[roomID].stage = "drafting";
+    lobbySocket.to(roomID).emit('draftstarted');
+    runRound(roomID);
+  })
   // Socket Room methods
 
 })
