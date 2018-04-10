@@ -79,7 +79,6 @@ function createPack(format){
   return pack;
 }
 
-
 // This creates our socket using the instance of the server
 const io = socketIO(server)
 var lobbySocket = io.of('/lobby');
