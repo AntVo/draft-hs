@@ -50,7 +50,11 @@ function runRound(roomID){
     })
     
     // for (var i = 0; i < 15; i++) {
-
+      let timer = 15000;
+      setInterval(function(){
+        timer--;
+        lobbySocket.emit('timer', timer);
+      }, 1000);
     // }
    // while peoples packs are not empty,
    // user picks a card and puts it in
