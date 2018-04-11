@@ -51,6 +51,7 @@
 
 .card-item{
 	width: 12%;
+	cursor: pointer;
 }
 
 .login{

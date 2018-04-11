@@ -17,6 +17,7 @@ export default class DraftRoom extends Component {
 	      	 drafters: [],
 	      	 pack: null,
 	      	 pick: null,
+	      	 timer: null,
 	    	};
 
 	      this.socket = socketIOClient(this.state.endpoint);
@@ -29,12 +30,14 @@ export default class DraftRoom extends Component {
 	      this.socket.on('draftstarted', () => {
 	      	this.setState({ stage: "drafting" });
 	      })
-
+	      this.socket.on('timer', (time)=>{
+	      	this.setState({ timer: time });
+	      })
 	 }
 
 
 	 componentDidMount(){
-	 	    this.socket.emit('joinroom', this.props.match.params.id, this.props.user);  
+	 	  this.socket.emit('joinroom', this.props.match.params.id, this.props.user);  
 	 }
 
 	 startDraft = () => {
@@ -45,7 +48,6 @@ export default class DraftRoom extends Component {
 	 selectCard = (card) => {
     this.setState({ pick: card });
    }
-
 
 	renderSection(){
 		if (this.state.stage === "pregame"){
@@ -58,7 +60,10 @@ export default class DraftRoom extends Component {
 		}
 		if (this.state.stage === "drafting" && this.state.pack !== null){
 			return(
-				<DraftGallery pack={this.state.pack} selectCard={this.selectCard} pick={this.state.pick}/>
+				<div>
+					<p>{this.state.timer}</p>
+					<DraftGallery pack={this.state.pack} selectCard={this.selectCard} pick={this.state.pick}/>
+				</div>
 			)
 		}
 		if (this.state.stage === "deckbuilding"){

@@ -12,7 +12,7 @@ export default class DraftGallery extends Component {
   renderSection(){
     return (
       this.props.pack.map((item)=> {
-        return <CardItem card={item} selectCard={this.props.selectCard} pick={this.state.pick}/>
+        return <CardItem card={item} selectCard={this.props.selectCard} pick={this.props.pick}/>
       })
     )
   }

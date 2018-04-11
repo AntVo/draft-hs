@@ -12,7 +12,6 @@ export default class CardItem extends Component {
   async getData(card){
     let res = await axios.get(`https://omgvamp-hearthstone-v1.p.mashape.com/cards/search/${card}?collectible=1`, {headers: {"X-Mashape-Key": "a12ngyGLHymsh3VwqbA8wkQ8BBZep1RZPKCjsnw7jAI9mfhnFi"}})
     const data = await res.data[0].img;
-    console.log(data);
     this.setState({ img: data});
   }
 
@@ -28,7 +27,7 @@ export default class CardItem extends Component {
 
   render(){
     let style = {};
-    (this.props.pick === this.props.card) ? style = { border: '5px solid lightGreen' } : style = {};
+    (this.props.pick === this.props.card) ? style = { border: '4px solid lightGreen' } : style = {};
 
     return (
       <div className="card-item">
