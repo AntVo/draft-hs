@@ -46,16 +46,27 @@ function runRound(roomID){
   // Give everyone a pack
     room.drafters.forEach((drafter) => {
       pack = createPack(room.format);
+      drafter.pack = pack;
       lobbySocket.to(drafter.id).emit('getpack', pack);
     })
     
     // for (var i = 0; i < 15; i++) {
-      let timer = 15000;
-      setInterval(function(){
-        timer--;
-        lobbySocket.emit('timer', timer);
+
+      let time = 10;
+      let timer =  setInterval(function(){
+        time--;
+        lobbySocket.emit('timer', time);
+        if (time <= 0){
+          lobbySocket.to(roomID).emit('getPicks');
+          clearInterval(timer);
+        }
       }, 1000);
+    
+      // Pick a card, reset timer, remove card from pack, and add to players deck.
+
+
     // }
+
    // while peoples packs are not empty,
    // user picks a card and puts it in
    // passes to next
@@ -103,9 +114,9 @@ lobbySocket.on('connection', socket => {
     lobbySocket.emit('roomlist', rooms); 
   })
 
-    socket.on('roomlist', () => {
-       socket.emit('roomlist', rooms);
-    })
+  socket.on('roomlist', () => {
+     socket.emit('roomlist', rooms);
+  })
 
   socket.on('joinroom', (roomID, username) => {
     console.log(username + ' is joining ' + roomID);
@@ -123,6 +134,18 @@ lobbySocket.on('connection', socket => {
     lobbySocket.to(roomID).emit('draftstarted');
     runRound(roomID);
   })
+
+  socket.on('pickCard', (roomID, pick) => {
+    // socket.id 
+    // This is some serious optimization gore 
+    console.log(roomID + pick);
+    let pack = rooms[roomID].drafters.filter((drafter) => drafter.id === socket.id)[0].pack;
+    pack = pack.filter((item)=> item !== pick);
+    rooms[roomID].drafters.filter((drafter) => drafter.id === socket.id)[0].pack = pack;
+    console.log(pack);
+  })
+
+
   // Socket Room methods
 
 })
