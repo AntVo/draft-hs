@@ -20,7 +20,7 @@ const sets = {
 		legendaries: ['Aya Blackpaw', 'Aya Blackpaw', 'Brann Bronzebeard', 'N\'Zoth, the Corruptor', 'N\'Zoth, the Corruptor', 'Kathrena Winterwisp', 'Kazakus','Reno Jackson', 'Kazakus', 
 		'Alexstrasza', 'Barnes', 'Bloodreaver Gul\'dan', 'Bloodmage Thalnos', 'Deathstalker Rexxar', 'Dr. Boom', 'The Lich King', 'Malfurion the Pestilent', 'Valeera the Hollow',
 		'Tirion Fordring', 'Sylvanas Windrunner', 'Justicar Trueheart', 'Frost Lich Jaina', 'Uther of the Ebon Blade', 'Kel\'Thuzad', 'Fandral Staghelm', 'Cairne Bloodhoof',
-		'Sonya Shadowdancer', 'Medivh, The Guardian', 'Shadowreaper Anduin', 'Scourgelord Garrosh', 'Sunkeeper Tarim', 'Emperor Thaurissan', 'Thrall Deathseer'],
+		'Sonya Shadowdancer', 'Medivh, The Guardian', 'Shadowreaper Anduin', 'Scourgelord Garrosh', 'Sunkeeper Tarim', 'Emperor Thaurissan', 'Thrall, Deathseer'],
 		
 		epics: ['Ultimate Infestation', 'Branching Paths', 'Meteor', 'Primordial Glyph','Gorehowl', 'Brawl', 'Vilespine Slayer', 'Shadowcaster', 'Cabal Shadow Priest', 'Curious Glimmerroot', 'Call to Arms', 'Coghammer', 
 		'Voidlord', 'Twisting Nether', 'Shadowcaster', 'Carnivorous Cube', 'Primordial Drake', 'Doomsayer'],

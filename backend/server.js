@@ -52,15 +52,32 @@ function runRound(roomID){
     
     // for (var i = 0; i < 15; i++) {
 
-      let time = 10;
+      let time = 13;
       let timer =  setInterval(function(){
         time--;
         lobbySocket.emit('timer', time);
         if (time <= 0){
           lobbySocket.to(roomID).emit('getPicks');
-          clearInterval(timer);
+          time = 13;
+          // PASS PACK TO NEXT PLAYER. 
+          for (var i = 0; i < room.drafters.length; i++){
+            if (i === 0){
+              var tempPack = room.drafters[i].pack;
+              room.drafters[i].pack = room.drafters[i+1].pack;
+            }
+            if (i === room.drafters.length-1)
+              room.drafters[i].pack = tempPack;
+            else
+              room.drafters[i].pack = room.drafters[i+1].pack;
+          }
+          // distribute packs.
+          room.drafters.forEach((drafter) => {
+            lobbySocket.to(drafter.id).emit('getpack', drafter.pack);
+          })   
         }
+
       }, 1000);
+  }
     
       // Pick a card, reset timer, remove card from pack, and add to players deck.
 
@@ -70,7 +87,7 @@ function runRound(roomID){
    // while peoples packs are not empty,
    // user picks a card and puts it in
    // passes to next
-}
+
 
 // returns a randomized pack (1 legendary, 2 epics, 4 rares, 8 commons)
 // TODO: Optimization, Create 25 packs instead of runniing create pack 25 times.
