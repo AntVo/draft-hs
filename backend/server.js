@@ -48,7 +48,7 @@ function runRound(roomID){
       pack = createPack(room.format);
       lobbySocket.to(drafter.id).emit('getpack', pack);
     })
-
+    
     // for (var i = 0; i < 15; i++) {
 
     // }

@@ -41,9 +41,21 @@
 	float: right;
 }
 
+#draft-gallery{
+	height: 500px;
+	width: 100%;
+	background-color: #f2f2f2;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.card-item{
+	width: 12%;
+}
 
 .login{
 	margin-top:10px;
 	margin-bottom:10px;
 }
+
 

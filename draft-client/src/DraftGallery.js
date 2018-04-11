@@ -4,23 +4,23 @@ import CardItem from './CardItem';
 export default class DraftGallery extends Component {
 
 
+  constructor(props){
+        super(props)
 
-  renderGallery = () => {
-      const array = [];
-      this.props.pack.map((card) => {
-        axios.get(`https://omgvamp-hearthstone-v1.p.mashape.com/cards/search/${card}`, {headers: {"X-Mashape-Key": "a12ngyGLHymsh3VwqbA8wkQ8BBZep1RZPKCjsnw7jAI9mfhnFi"}})
-          .then(res => {
-            console.log(res.data);
-            array.push(<CardItem img={res.data.img} />);
-          })
+   }
+
+  renderSection(){
+    return (
+      this.props.pack.map((item)=> {
+        return <CardItem card={item} selectCard={this.props.selectCard} pick={this.state.pick}/>
       })
-      return array;
+    )
   }
 
-	render(){
+	render(){ 
 		return (
-		  <div>
-		  	{this.renderGallery()}
+		  <div id="draft-gallery">
+        {this.renderSection()}
       </div>
 	)}
 }
