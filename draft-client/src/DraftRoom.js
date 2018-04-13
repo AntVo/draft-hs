@@ -27,6 +27,8 @@ export default class DraftRoom extends Component {
 	      	this.setState({ drafters: data });
 	      })
 	      this.socket.on('getpack', (pack) => {
+	      	this.setState({ pack: null });
+	      	this.setState({ pick: null });
 	      	this.setState({ pack: pack });
 	      });
 	      this.socket.on('draftstarted', () => {

@@ -52,33 +52,39 @@ function runRound(roomID){
     
     // for (var i = 0; i < 15; i++) {
 
-      let time = 13;
+      let time = 16;
       let timer =  setInterval(function(){
         time--;
         lobbySocket.emit('timer', time);
         if (time <= 0){
           lobbySocket.to(roomID).emit('getPicks');
-          time = 13;
           // PASS PACK TO NEXT PLAYER. 
-          for (var i = 0; i < room.drafters.length; i++){
-            if (i === 0){
-              var tempPack = room.drafters[i].pack;
-              room.drafters[i].pack = room.drafters[i+1].pack;
-            }
-            if (i === room.drafters.length-1)
-              room.drafters[i].pack = tempPack;
-            else
-              room.drafters[i].pack = room.drafters[i+1].pack;
-          }
-          // distribute packs.
-          room.drafters.forEach((drafter) => {
-            lobbySocket.to(drafter.id).emit('getpack', drafter.pack);
-          })   
+          passPacks(room);
+          // Distribute Packs
+          setTimeout(function() {
+            room.drafters.forEach((drafter) => {
+              lobbySocket.to(drafter.id).emit('getpack', drafter.pack);
+            })   
+            time = 16;
+          }, 100);
+
         }
 
       }, 1000);
   }
     
+  function passPacks(room){
+     for (var i = 0; i < room.drafters.length; i++){
+        if (i === 0){
+          var tempPack = room.drafters[i].pack;
+          room.drafters[i].pack = room.drafters[i+1].pack;
+        }
+        if (i === room.drafters.length-1)
+          room.drafters[i].pack = tempPack;
+        else
+          room.drafters[i].pack = room.drafters[i+1].pack;
+      }
+  }
       // Pick a card, reset timer, remove card from pack, and add to players deck.
 
 
