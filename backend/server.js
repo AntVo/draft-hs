@@ -161,6 +161,7 @@ lobbySocket.on('connection', socket => {
   socket.on('pickCard', (roomID, pick) => {
     // socket.id 
     // This is some serious optimization gore 
+    // This isnt actually removing cards....
     console.log(roomID + pick);
     let pack = rooms[roomID].drafters.filter((drafter) => drafter.id === socket.id)[0].pack;
     pack = pack.filter((item)=> item !== pick);
