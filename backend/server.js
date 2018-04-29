@@ -52,20 +52,22 @@ function runRound(roomID){
     
     // for (var i = 0; i < 15; i++) {
 
-      let time = 16;
+      let time = 20;
       let timer =  setInterval(function(){
         time--;
         lobbySocket.emit('timer', time);
         if (time <= 0){
           lobbySocket.to(roomID).emit('getPicks');
           // PASS PACK TO NEXT PLAYER. 
-          passPacks(room);
+                        passPacks(room);
+
           // Distribute Packs
           setTimeout(function() {
             room.drafters.forEach((drafter) => {
               lobbySocket.to(drafter.id).emit('getpack', drafter.pack);
+              console.log('sending packs');
             })   
-            time = 16;
+            time = 20;
           }, 100);
 
         }
@@ -163,10 +165,11 @@ lobbySocket.on('connection', socket => {
     // This is some serious optimization gore 
     // This isnt actually removing cards....
     console.log(roomID + pick);
+    console.log(rooms[roomID].drafters);
     let pack = rooms[roomID].drafters.filter((drafter) => drafter.id === socket.id)[0].pack;
-    pack = pack.filter((item)=> item !== pick);
-    rooms[roomID].drafters.filter((drafter) => drafter.id === socket.id)[0].pack = pack;
+    pack = pack.filter((item)=> item !== pick );
     console.log(pack);
+    rooms[roomID].drafters.filter((drafter) => drafter.id === socket.id)[0].pack = pack;
   })
 
 
