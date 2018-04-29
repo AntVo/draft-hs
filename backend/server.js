@@ -52,23 +52,26 @@ function runRound(roomID){
     
     // for (var i = 0; i < 15; i++) {
 
-      let time = 20;
+      let time = 15;
       let timer =  setInterval(function(){
         time--;
         lobbySocket.emit('timer', time);
         if (time <= 0){
           lobbySocket.to(roomID).emit('getPicks');
           // PASS PACK TO NEXT PLAYER. 
-                        passPacks(room);
+          setTimeout(function() {
+            passPacks(room);
 
+          }, 330);
           // Distribute Packs
           setTimeout(function() {
+
             room.drafters.forEach((drafter) => {
               lobbySocket.to(drafter.id).emit('getpack', drafter.pack);
               console.log('sending packs');
             })   
             time = 20;
-          }, 100);
+          }, 1560);
 
         }
 
